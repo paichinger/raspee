@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.topdesk.raspee.dto.AvailabilityDto;
 import com.topdesk.raspee.gpio.GpioListener;
 
 @RestController
@@ -17,8 +18,8 @@ public class AvailabilityResource {
 	}
 
 	@RequestMapping("/available")
-	public boolean isAvailable() {
-		return gpio.isReleased();
+	public AvailabilityDto isAvailable() {
+		return new AvailabilityDto(gpio.isReleased());
 	}
 	
 

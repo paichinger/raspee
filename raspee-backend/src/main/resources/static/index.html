@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello WebSocket</title>
+    <script src="sockjs.js"></script>
+    <script src="stomp.js"></script>
+    <script src="jquery-3.1.0.min.js"></script>
+    <script>
+        var stompClient = null;
+
+        function connect() {
+            var socket = new SockJS('/available');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function(frame) {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/available', function(response){
+                    showAvailability(JSON.parse(response.body).available);
+                });
+                requestAvailability();
+            });
+        }
+
+        function disconnect() {
+            if (stompClient != null) {
+                stompClient.disconnect();
+            }
+            console.log("Disconnected");
+        }
+
+        function requestAvailability() {
+        	stompClient.send("/app/available", {}, "HUHU");
+        }
+
+        function showAvailability(availability) {
+            var response = document.getElementById('response');
+            var p = document.createElement('p');
+            p.style.wordWrap = 'break-word';
+            p.appendChild(document.createTextNode(availability));
+            response.appendChild(p);
+        }
+    </script>
+</head>
+<body onLoad="connect()">
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being enabled. Please enable
+    Javascript and reload this page!</h2></noscript>
+Availability: <br>
+<div id="response">tes</div>
+</body>
+</html>
