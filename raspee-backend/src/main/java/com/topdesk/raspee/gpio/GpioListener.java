@@ -28,7 +28,6 @@ public class GpioListener {
 	
 	@Autowired
 	public GpioListener(final SitzungRepository sitzungRepository, SimpMessagingTemplate template) {
-		changeValue(template);
 		gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "MyLED", PinState.HIGH);
 
 		pin2 = gpio.provisionDigitalInputPin(RaspiPin.GPIO_04, PinPullResistance.PULL_DOWN);
@@ -49,26 +48,6 @@ public class GpioListener {
                 }
             }
         });
-	}
-	
-	private void changeValue(SimpMessagingTemplate template) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				boolean value = true;
-				while(true) {
-					template.convertAndSend("/topic/available", new AvailabilityDto(value));
-					System.out.println(value);
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					value = !value;
-				}
-			}
-		}).start();
 	}
 	
 	public boolean isReleased() {
