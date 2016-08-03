@@ -32,11 +32,7 @@
         }
 
         function showAvailability(availability) {
-            var response = document.getElementById('response');
-            var p = document.createElement('p');
-            p.style.wordWrap = 'break-word';
-            p.appendChild(document.createTextNode(availability));
-            response.appendChild(p);
+            $('#response').text(availability);
         }
     </script>
 </head>
@@ -44,6 +40,6 @@
 <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being enabled. Please enable
     Javascript and reload this page!</h2></noscript>
 Availability: <br>
-<div id="response">tes</div>
+<span id="response">test</span>
 </body>
 </html>

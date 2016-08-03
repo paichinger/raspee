@@ -5,21 +5,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.topdesk.raspee.dto.AvailabilityDto;
-import com.topdesk.raspee.gpio.GpioListener;
+import com.topdesk.raspee.gpio.SimpleStateChangeAction;
 
 @RestController
 public class AvailabilityResource {
 	
-	private final GpioListener gpio;
+	private final SimpleStateChangeAction stateChangeAction;
 	
 	@Autowired
-	public AvailabilityResource(GpioListener gpio) {
-		this.gpio = gpio;
+	public AvailabilityResource(SimpleStateChangeAction stateChangeAction) {
+		this.stateChangeAction = stateChangeAction;
 	}
 
 	@RequestMapping("/available")
 	public AvailabilityDto isAvailable() {
-		return new AvailabilityDto(gpio.isReleased());
+		return new AvailabilityDto(stateChangeAction.isActive());
 	}
 	
 
