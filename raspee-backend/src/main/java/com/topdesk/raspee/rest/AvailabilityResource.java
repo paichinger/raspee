@@ -21,6 +21,5 @@ public class AvailabilityResource {
 	public AvailabilityDto isAvailable() {
 		return new AvailabilityDto(stateChangeAction.isActive());
 	}
-	
 
 }
