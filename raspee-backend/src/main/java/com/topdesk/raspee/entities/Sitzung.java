@@ -1,21 +1,12 @@
 package com.topdesk.raspee.entities;
 
+import lombok.Data;
+
+import javax.persistence.*;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @Entity( name = "sitzung" )
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class Sitzung {
 	
 	@Id

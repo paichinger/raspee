@@ -1,10 +1,8 @@
 package com.topdesk.raspee.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Value;
 
-@AllArgsConstructor
-@Getter
+@Value
 public class AvailabilityDto {
 	private final boolean available;
 }
