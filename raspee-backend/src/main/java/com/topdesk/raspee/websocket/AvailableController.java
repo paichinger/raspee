@@ -1,36 +1,28 @@
 package com.topdesk.raspee.websocket;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
-
 import com.topdesk.raspee.dto.AvailabilityDto;
 import com.topdesk.raspee.gpio.MyGpioController;
-import com.topdesk.raspee.gpio.SimpleStateChangeAction;
-import com.topdesk.raspee.gpio.StateChangeAction;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Component;
 
-@Controller
+import javax.annotation.PostConstruct;
+
+@Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AvailableController {
 	
-	private final SimpleStateChangeAction action;
+	private final MyGpioController gpioController;
+	private final SimpMessagingTemplate template;
+	private AvailabilityDto lastDto;
 
-	@Autowired
-	public AvailableController(SimpleStateChangeAction action, MyGpioController gpioController, SimpMessagingTemplate template) {
-		this.action = action;
-		gpioController.addListener(new StateChangeAction() {
-			@Override
-			public void perform(boolean isActive) {
-				template.convertAndSend("/topic/available",	new AvailabilityDto(isActive));
-			}
+	@PostConstruct
+	public void init() {
+		gpioController.addListener(doorClosed -> {
+			lastDto = new AvailabilityDto(doorClosed);
+			template.convertAndSend("/topic/available", lastDto);
 		});
 	}
-
-    @MessageMapping("/available")
-    @SendTo("/topic/available")
-    public AvailabilityDto available() throws Exception {
-    	return new AvailabilityDto(!action.isActive());
-    }
 
 }
